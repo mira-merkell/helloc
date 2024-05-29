@@ -18,7 +18,6 @@
 #################
 # Configuration #
 #################
-
 PROJECT	= helloc
 VERSION = 0.1
 
@@ -33,15 +32,12 @@ LDFLAGS	=
 ################
 # Build system #
 ################
-
 MKDIR	= mkdir -p
 RM	= rm -fv
+ASMFLAGS += -DPROJECT=\"$(PROJECT)\" -DVERSION=\"$(VERSION)\"
+CFLAGS	+= -DPROJECT=\"$(PROJECT)\" -DVERSION=\"$(VERSION)\"
 
-ASMFLAGS	+= -DPROJECT=\"$(PROJECT)\" -DVERSION=\"$(VERSION)\"
-CFLAGS		+= -DPROJECT=\"$(PROJECT)\" -DVERSION=\"$(VERSION)\"
-
-.PHONY: all build build-test clean debug dist-clean test
-
+.PHONY: all build build-test clean debug distclean test
 .DEFAULT_GOAL:= all
 all: build build-test
 
@@ -49,39 +45,34 @@ debug: all
 debug: ASMFLAGS	+= -g -DDEBUG
 debug: CFLAGS	+= -g -Og -DDEBUG
 
+# Compile assembly sources
 %.s.o: %.s
 	$(ASM) $(ASMFLAGS) -o $@ $<
 
 
-# Programs
+# Programs 
 PROGRAMS = helloc
 build: $(PROGRAMS)
 
-# Program dependencies
-helloc: helloc.s.o
+helloc: helloc.o helloc.s.o
 
 
 # Tests
-TESTS 	= test_helloc 	\
-		test_iseven
-
+TESTS	= test_helloc
 build-test: $(TESTS)
-
 test: build-test
-	@for t in $(TESTS); do \
-		echo \--- $$t ;\
-		./$$t ;\
+	@for t in $(TESTS); do		\
+		echo \--- $$t ;		\
+		./$$t ;			\
 	done
 
-# Test dependencies
-test_helloc: helloc.s.o
-test_iseven: helloc.s.o
+test_helloc: test_helloc.o helloc.s.o
 
 
 # Cleanup 
 clean:
 	$(RM) *.o *.d
 
-dist-clean: clean
+distclean: clean
 	$(RM) $(PROGRAMS)
 	$(RM) $(TESTS)
