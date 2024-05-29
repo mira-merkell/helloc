@@ -34,6 +34,7 @@ $(PROGRAM): $(OBJS)
 	$(AS) $(ASFLAGS) -o $@ $<
 
 test: $(PROGRAM)
+	@echo \--- $(PROGRAM)
 	@./$(PROGRAM)
 
 clean:

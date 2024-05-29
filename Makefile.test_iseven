@@ -14,42 +14,29 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <https://www.gnu.org/licenses/>.
-PROJECT	= helloc
-AS	= nasm
-ASFLAGS	= -Ox -felf64 -w+all -w-reloc-rel-dword
-CC	= gcc
-CFLAGS	= -O2 -march=native -Wall -Wextra
-LDLIBS	=
-LDFLAGS	=
-MKDIR	= mkdir -p
-RM	= rm -fv
-export
+PROGRAM	= test_iseven
+SRCS	= test_iseven.c		\
+		 helloc.s
+OBJS	= $(SRCS:%=%.o)
+DEPS	= $(SRCS:%=%.d)
 
-.DEFAULT_GOAL	:= all
-.PHONY: all build build-test clean debug test
+.DEFAULT_GOAL	:= $(PROGRAM)
+.PHONY: clean test
+-include $(DEPS)
 
-all: build build-test
+$(PROGRAM): $(OBJS)
+	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
-debug: all
-debug: ASFLAGS	+= -g -DDEBUG
-debug: CFLAGS	+= -g -Og -DDEBUG
+%.c.o: %.c
+	$(CC) -MP -MMD $(CFLAGS) -o $@ -c $<
 
-build: helloc
+%.s.o: %.s
+	$(AS) $(ASFLAGS) -o $@ $<
 
-helloc:
-	make -f Makefile.helloc
-
-build-test:
-	@find . -name "Makefile.test_*" | while read f; do \
-		make -f $$f ; \
-	done
-
-test: build-test
-	@find . -name "Makefile.test_*" | while read f; do \
-		make -sf $$f test ; \
-	done
+test: $(PROGRAM)
+	@echo \--- $(PROGRAM)
+	@./$(PROGRAM)
 
 clean:
-	@find . -name "Makefile.*" | while read f; do \
-		make -f $$f clean ; \
-	done
+	$(RM) $(OBJS) $(DEPS)
+	$(RM) $(PROGRAM)

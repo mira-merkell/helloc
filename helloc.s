@@ -52,7 +52,7 @@ helloc_world:
 ; Test if the number is even.
 ;
 ; Signature:
-;	int helloc_even(uint64_t);
+;	int helloc_iseven(uint64_t);
 ;
 ; Returns:
 ;	1	- if the first argument is even
