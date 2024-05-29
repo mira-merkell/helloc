@@ -1,3 +1,5 @@
+# Configuration and build system
+#
 # Copyright 2024 ⧉⧉⧉
 #
 # This file is part of helloc.
@@ -18,13 +20,13 @@
 #################
 # Configuration #
 #################
-PROJECT	= helloc
+PROGRAM	= helloc
 VERSION = 0.1
 
 ASM	= nasm
 ASMFLAGS= -Ox -felf64 -w+all -w-reloc-rel-dword
 CC	= gcc
-CFLAGS	= -O2 -march=native -Wall -Wextra
+CFLAGS	= -std=c11 -O2 -march=native -Wall -Wextra
 LDLIBS	=
 LDFLAGS	=
 
@@ -32,47 +34,54 @@ LDFLAGS	=
 ################
 # Build system #
 ################
+
+PROGS	= helloc
+TESTS	= test_helloc
+
+helloc:		helloc.o helloc.s.o
+helloc.o:	helloc.h
+helloc.s.o:	helloc.h
+
+test_helloc:	test_helloc.o helloc.s.o
+test_helloc.o:	helloc.h
+
+# Version
+VERMACROS	= -DPROGRAM=\"$(PROGRAM)\" -DVERSION=\"$(VERSION)\"
+ASMFLAGS	+= $(VERMACROS)
+CFLAGS		+= $(VERMACROS)
+
+# Utilities
 MKDIR	= mkdir -p
 RM	= rm -fv
-ASMFLAGS += -DPROJECT=\"$(PROJECT)\" -DVERSION=\"$(VERSION)\"
-CFLAGS	+= -DPROJECT=\"$(PROJECT)\" -DVERSION=\"$(VERSION)\"
 
-.PHONY: all build build-test clean debug distclean test
+.PHONY: all			\
+	debug 			\
+	build build-test	\
+	clean			\
+	test
+
 .DEFAULT_GOAL:= all
 all: build build-test
 
-debug: all
+debug: build build-test
 debug: ASMFLAGS	+= -g -DDEBUG
 debug: CFLAGS	+= -g -Og -DDEBUG
 
-# Compile assembly sources
+# Generate objects with NASM assembler
 %.s.o: %.s
 	$(ASM) $(ASMFLAGS) -o $@ $<
 
-
-# Programs 
-PROGRAMS = helloc
-build: $(PROGRAMS)
-
-helloc: helloc.o helloc.s.o
-
-
-# Tests
-TESTS	= test_helloc
-build-test: $(TESTS)
-test: build-test
+# Build and run tests
+build:		$(PROGS)
+build-test:	$(TESTS)
+test: 		build-test
 	@for t in $(TESTS); do		\
 		echo \--- $$t ;		\
 		./$$t ;			\
 	done
 
-test_helloc: test_helloc.o helloc.s.o
-
-
-# Cleanup 
+# Tidy up
 clean:
 	$(RM) *.o *.d
-
-distclean: clean
-	$(RM) $(PROGRAMS)
+	$(RM) $(PROGS)
 	$(RM) $(TESTS)
