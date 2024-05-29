@@ -1,3 +1,5 @@
+# Configuration and build system
+#
 # Copyright 2024 ⧉⧉⧉
 #
 # This file is part of helloc.
@@ -15,40 +17,71 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#################
+# Configuration #
+#################
 PROGRAM	= helloc
+VERSION = 0.1
 
-SRCS	= helloc.c helloc.s
-OBJS	= $(SRCS:%=%.o)
-DEPS	= $(SRCS:%=%.d)
-
-AS	= nasm
-ASFLAGS	= -g -Ox -felf64 -w+all -w-reloc-rel-dword
+ASM	= nasm
+ASMFLAGS= -Ox -felf64 -w+all -w-reloc-rel-dword
 CC	= gcc
-CFLAGS	= -g -Og -march=native -Wall -Wextra
+CFLAGS	= -std=c11 -O2 -march=native -Wall -Wextra
 LDLIBS	=
 LDFLAGS	=
 
+
+################
+# Build system #
+################
+
+PROGS	= helloc
+TESTS	= test_helloc
+
+helloc:		helloc.o helloc.s.o
+helloc.o:	helloc.h
+helloc.s.o:	helloc.h
+
+test_helloc:	test_helloc.o helloc.s.o
+test_helloc.o:	helloc.h
+
+# Version
+VERMACROS	= -DPROGRAM=\"$(PROGRAM)\" -DVERSION=\"$(VERSION)\"
+ASMFLAGS	+= $(VERMACROS)
+CFLAGS		+= $(VERMACROS)
+
+# Utilities
 MKDIR	= mkdir -p
 RM	= rm -fv
 
+.PHONY: all			\
+	debug 			\
+	build build-test	\
+	clean			\
+	test
 
-.DEFAULT_GOAL	:= all
+.DEFAULT_GOAL:= all
+all: build build-test
 
-.PHONY: all
-all: $(PROGRAM)
+debug: build build-test
+debug: ASMFLAGS	+= -g -DDEBUG
+debug: CFLAGS	+= -g -Og -DDEBUG
 
--include $(DEPS)
-$(PROGRAM): $(OBJS)
-	$(CC) -o $@ $^ $(LDLIBS) $(LDFLAGS)
-
-%.c.o: %.c
-	$(CC) -MP -MMD $(CFLAGS) -o $@ -c $<
-
+# Generate objects with NASM assembler
 %.s.o: %.s
-	$(AS) $(ASFLAGS) -o $@ $<
+	$(ASM) $(ASMFLAGS) -o $@ $<
 
+# Build and run tests
+build:		$(PROGS)
+build-test:	$(TESTS)
+test: 		build-test
+	@for t in $(TESTS); do		\
+		echo \--- $$t ;		\
+		./$$t ;			\
+	done
 
-.PHONY: clean
+# Tidy up
 clean:
-	$(RM) $(OBJS) $(DEPS)
-	$(RM) $(PROGRAM)
+	$(RM) *.o *.d
+	$(RM) $(PROGS)
+	$(RM) $(TESTS)

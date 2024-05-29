@@ -1,6 +1,6 @@
-/* helloc.c: main driver code.
+/* test_helloc.c: test example.
  *
- * Copyright 2024 ⧉⧉⧉
+ * Copyright 2024 Marek Miller
  *
  * This file is part of helloc.
  *
@@ -17,14 +17,36 @@
  * You should have received a copy of the GNU General Public License along with
  * this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <stdint.h>
 #include <stdio.h>
+
+#include "helloc.h"
+
+static int test_rt = 0;
+
+#define TEST_FAIL(...)	({                                                    \
+	fprintf(stderr, "FAIL %s:%d \"", __FILE__, __LINE__);                 \
+	fprintf(stderr, __VA_ARGS__);	                                      \
+	fprintf(stderr, "\"\n");	                                      \
+	test_rt = -1;                                                         \
+	})
+
+static void test_iseven(void)
+{
+	if (helloc_iseven(3))
+		TEST_FAIL("not an even number");
+}
 
 int main(int argc, char **argv)
 {
 	(void)argc;
 	(void)argv;
 
-	printf("%s-%s\n", PROGRAM, VERSION);
+	helloc_world();
+	test_iseven();
 
-	return 0;
+	if (test_rt == 0)
+		fprintf(stderr, "OK\n");
+
+	return test_rt;
 }

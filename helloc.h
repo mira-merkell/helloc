@@ -1,4 +1,4 @@
-/* helloc.c: main driver code.
+/* helloc.h: main helloc functionality.
  *
  * Copyright 2024 ⧉⧉⧉
  *
@@ -17,14 +17,13 @@
  * You should have received a copy of the GNU General Public License along with
  * this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include <stdio.h>
+#ifndef HELLOC_H
+#define HELLOC_H
 
-int main(int argc, char **argv)
-{
-	(void)argc;
-	(void)argv;
+#include <stdint.h>
 
-	printf("%s-%s\n", PROGRAM, VERSION);
+void helloc_world(void);
 
-	return 0;
-}
+int helloc_iseven(uint64_t);
+
+#endif /* HELLOC_H */

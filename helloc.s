@@ -16,22 +16,28 @@
 ;
 ; You should have received a copy of the GNU General Public License along with
 ; this program.  If not, see <https://www.gnu.org/licenses/>.
-
 [bits 64]
 default rel
 
-global hello_world
+global helloc_world, helloc_iseven
 
 
 section .rodata
 
-hello_msg	db "Hello from asm!", 10, 0
+hello_msg	db PROGRAM, "-", VERSION, 10
+		db "Hello from asm!", 10, 0
 
 
 section .text
 	extern printf
 
-hello_world:
+
+; Print a hello message to stdout
+;
+; Signature:
+;	void helloc_world(void);
+;
+helloc_world:
 	push	rbp
 	mov	rbp, rsp
 
@@ -42,3 +48,20 @@ hello_world:
 	mov	rsp, rbp
 	pop	rbp
 	ret
+
+
+; Test if the number is even.
+;
+; Signature:
+;	int helloc_iseven(uint64_t);
+;
+; Returns:
+;	1	- if the first argument is even
+;	0	- otherwise
+;
+helloc_iseven:
+	xor	eax, eax
+	and	rdi, 1
+	setz	al
+	ret
+
