@@ -24,7 +24,8 @@ global helloc_world, helloc_iseven
 
 section .rodata
 
-hello_msg	db "Hello from asm!", 10, 0
+hello_msg	db PROJECT, "-", VERSION, 10
+		db "Hello from asm!", 10, 0
 
 
 section .text

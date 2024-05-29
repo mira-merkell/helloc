@@ -17,14 +17,14 @@
  * You should have received a copy of the GNU General Public License along with
  * this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "helloc.h"
+#include <stdio.h>
 
 int main(int argc, char **argv)
 {
 	(void)argc;
 	(void)argv;
 
-	helloc_world();
+	printf("%s-%s\n", PROGRAM, VERSION);
 
 	return 0;
 }

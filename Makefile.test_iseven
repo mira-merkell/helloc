@@ -21,7 +21,6 @@ OBJS	= $(SRCS:%=%.o)
 DEPS	= $(SRCS:%=%.d)
 
 .DEFAULT_GOAL	:= $(PROGRAM)
-.PHONY: clean test
 -include $(DEPS)
 -include Makefile._common
 -include Makefile._test_common

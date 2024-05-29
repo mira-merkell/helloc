@@ -14,7 +14,12 @@
 #
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <https://www.gnu.org/licenses/>.
+
+###################
+#  Configuration  #
+###################
 PROJECT	= helloc
+VERSION = 0.1
 
 AS	= nasm
 ASFLAGS	= -Ox -felf64 -w+all -w-reloc-rel-dword
@@ -25,6 +30,12 @@ LDFLAGS	=
 MKDIR	= mkdir -p
 RM	= rm -fv
 
+
+##################
+#  Build system  #
+##################
+ASFLAGS	+= -DPROJECT=\"$(PROJECT)\" -DVERSION=\"$(VERSION)\"
+CFLAGS	+= -DPROJECT=\"$(PROJECT)\" -DVERSION=\"$(VERSION)\"
 export
 
 .DEFAULT_GOAL	:= all

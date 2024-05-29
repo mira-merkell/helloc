@@ -18,11 +18,12 @@ $(PROGRAM): $(OBJS)
 	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
 
 %.c.o: %.c
-	$(CC) -MP -MMD $(CFLAGS) -o $@ -c $<
+	$(CC) -MP -MMD -DPROGRAM=\"$(PROGRAM)\" $(CFLAGS) -o $@ -c $<
 
 %.s.o: %.s
-	$(AS) $(ASFLAGS) -o $@ $<
+	$(AS) -DPROGRAM=\"$(PROGRAM)\" $(ASFLAGS) -o $@ $<
 
+.PHONY: clean
 clean:
 	$(RM) $(OBJS) $(DEPS)
 	$(RM) $(PROGRAM)
