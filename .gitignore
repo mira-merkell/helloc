@@ -1,0 +1,8 @@
+helloc
+
+*.o
+*.d
+
+*.swp
+
+tmp/
