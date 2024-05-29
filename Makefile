@@ -23,18 +23,17 @@
 PROGRAM	= helloc
 VERSION = 0.1
 
-ASM	= nasm
-ASMFLAGS= -Ox -felf64 -w+all -w-reloc-rel-dword
-CC	= gcc
-CFLAGS	= -std=c11 -O2 -march=native -Wall -Wextra
-LDLIBS	=
-LDFLAGS	=
+ASM	?= nasm
+ASMFLAGS+= -Ox -felf64 -w+all -w-reloc-rel-dword
+CC	?= gcc
+CFLAGS	+= -std=c11 -O2 -march=native -Wall -Wextra
+LDLIBS	+=
+LDFLAGS	+=
 
 
 ################
 # Build system #
 ################
-
 PROGS	= helloc
 TESTS	= test_helloc
 
@@ -54,18 +53,16 @@ CFLAGS		+= $(VERMACROS)
 MKDIR	= mkdir -p
 RM	= rm -fv
 
-.PHONY: all			\
-	debug 			\
+.PHONY: all debug 		\
 	build build-test	\
-	clean			\
-	test
+	test clean		\
 
 .DEFAULT_GOAL:= all
 all: build build-test
 
 debug: build build-test
-debug: ASMFLAGS	+= -g -DDEBUG
-debug: CFLAGS	+= -g -Og -DDEBUG
+debug: ASMFLAGS	+= -DDEBUG -g
+debug: CFLAGS	+= -DDEBUG -g -Og
 
 # Generate objects with NASM assembler
 %.s.o: %.s
@@ -74,7 +71,7 @@ debug: CFLAGS	+= -g -Og -DDEBUG
 # Build and run tests
 build:		$(PROGS)
 build-test:	$(TESTS)
-test: 		build-test
+test: build-test
 	@for t in $(TESTS); do		\
 		echo \--- $$t ;		\
 		./$$t ;			\
