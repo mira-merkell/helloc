@@ -23,20 +23,5 @@ DEPS	= $(SRCS:%=%.d)
 .DEFAULT_GOAL	:= $(PROGRAM)
 .PHONY: clean test
 -include $(DEPS)
-
-$(PROGRAM): $(OBJS)
-	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
-
-%.c.o: %.c
-	$(CC) -MP -MMD $(CFLAGS) -o $@ -c $<
-
-%.s.o: %.s
-	$(AS) $(ASFLAGS) -o $@ $<
-
-test: $(PROGRAM)
-	@echo \--- $(PROGRAM)
-	@./$(PROGRAM)
-
-clean:
-	$(RM) $(OBJS) $(DEPS)
-	$(RM) $(PROGRAM)
+-include Makefile._common
+-include Makefile._test_common
