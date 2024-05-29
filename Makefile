@@ -15,54 +15,73 @@
 # You should have received a copy of the GNU General Public License along with
 # this program.  If not, see <https://www.gnu.org/licenses/>.
 
-###################
-#  Configuration  #
-###################
+#################
+# Configuration #
+#################
+
 PROJECT	= helloc
 VERSION = 0.1
 
-AS	= nasm
-ASFLAGS	= -Ox -felf64 -w+all -w-reloc-rel-dword
+ASM	= nasm
+ASMFLAGS= -Ox -felf64 -w+all -w-reloc-rel-dword
 CC	= gcc
 CFLAGS	= -O2 -march=native -Wall -Wextra
 LDLIBS	=
 LDFLAGS	=
+
+
+################
+# Build system #
+################
+
 MKDIR	= mkdir -p
 RM	= rm -fv
 
+ASMFLAGS	+= -DPROJECT=\"$(PROJECT)\" -DVERSION=\"$(VERSION)\"
+CFLAGS		+= -DPROJECT=\"$(PROJECT)\" -DVERSION=\"$(VERSION)\"
 
-##################
-#  Build system  #
-##################
-ASFLAGS	+= -DPROJECT=\"$(PROJECT)\" -DVERSION=\"$(VERSION)\"
-CFLAGS	+= -DPROJECT=\"$(PROJECT)\" -DVERSION=\"$(VERSION)\"
-export
+.PHONY: all build build-test clean debug dist-clean test
 
-.DEFAULT_GOAL	:= all
-.PHONY: all build build-test clean debug test
-
+.DEFAULT_GOAL:= all
 all: build build-test
 
 debug: all
-debug: ASFLAGS	+= -g -DDEBUG
+debug: ASMFLAGS	+= -g -DDEBUG
 debug: CFLAGS	+= -g -Og -DDEBUG
 
-build: helloc
+%.s.o: %.s
+	$(ASM) $(ASMFLAGS) -o $@ $<
 
-helloc:
-	make -f Makefile.helloc
 
-build-test:
-	@find . -name "Makefile.test_*" | while read f; do \
-		make -f $$f ; \
-	done
+# Programs
+PROGRAMS = helloc
+build: $(PROGRAMS)
+
+# Program dependencies
+helloc: helloc.s.o
+
+
+# Tests
+TESTS 	= test_helloc 	\
+		test_iseven
+
+build-test: $(TESTS)
 
 test: build-test
-	@find . -name "Makefile.test_*" | while read f; do \
-		make -sf $$f test ; \
+	@for t in $(TESTS); do \
+		echo \--- $$t ;\
+		./$$t ;\
 	done
 
+# Test dependencies
+test_helloc: helloc.s.o
+test_iseven: helloc.s.o
+
+
+# Cleanup 
 clean:
-	@find . -name "Makefile.*" | while read f; do \
-		make -f $$f clean ; \
-	done
+	$(RM) *.o *.d
+
+dist-clean: clean
+	$(RM) $(PROGRAMS)
+	$(RM) $(TESTS)

@@ -24,7 +24,7 @@ int main(int argc, char **argv)
 	(void)argc;
 	(void)argv;
 
-	printf("%s-%s\n", PROGRAM, VERSION);
+	printf("%s-%s\n", PROJECT, VERSION);
 
 	return 0;
 }
