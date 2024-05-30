@@ -21,22 +21,18 @@ default rel
 
 global helloc_world, helloc_iseven
 
-
 section .rodata
 
 hello_msg	db PROGRAM, "-", VERSION, 10
 		db "Hello from asm!", 10, 0
 
-
 section .text
 	extern printf
 
-
-; Print a hello message to stdout
+; Print a hello message to stdout.
 ;
 ; Signature:
 ;	void helloc_world(void);
-;
 helloc_world:
 	push	rbp
 	mov	rbp, rsp
@@ -50,18 +46,12 @@ helloc_world:
 	ret
 
 
-; Test if the number is even.
+; Test, if the number is even.
 ;
 ; Signature:
-;	int helloc_iseven(uint64_t);
-;
-; Returns:
-;	1	- if the first argument is even
-;	0	- otherwise
-;
+;	int helloc_iseven(uint64_t a);
 helloc_iseven:
 	xor	eax, eax
 	and	rdi, 1
 	setz	al
 	ret
-

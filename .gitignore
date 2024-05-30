@@ -1,6 +1,5 @@
 helloc
 test_helloc
-test_iseven
 
 *.o
 *.d
