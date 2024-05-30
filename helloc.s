@@ -23,7 +23,7 @@ global helloc_world, helloc_iseven
 
 section .rodata
 
-hello_msg	db PROGRAM, "-", VERSION, 10
+hello_msg	db PROGRAM, "-", VERSION, ": "
 		db "Hello from asm!", 10, 0
 
 section .text
@@ -46,7 +46,7 @@ helloc_world:
 	ret
 
 
-; Test, if the number is even.
+; Test if the number is even.
 ;
 ; Signature:
 ;	int helloc_iseven(uint64_t a);

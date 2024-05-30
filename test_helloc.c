@@ -42,7 +42,6 @@ int main(int argc, char **argv)
 	(void)argc;
 	(void)argv;
 
-	helloc_world();
 	test_iseven();
 
 	if (test_rt == 0)

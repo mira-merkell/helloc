@@ -21,7 +21,7 @@
 # Configuration #
 #################
 PROGRAM	= helloc
-VERSION = 0.1
+VERSION = 1.0.1
 
 ASM	?= nasm
 ASMFLAGS+= -Ox -felf64 -w+all -w-reloc-rel-dword
@@ -37,9 +37,10 @@ LDFLAGS	+=
 PROGS	= helloc
 TESTS	= test_helloc
 
+# Dependencies
 helloc:		helloc.o helloc.s.o
 helloc.o:	helloc.h
-helloc.s.o:	helloc.h
+helloc.s.o:
 
 test_helloc:	test_helloc.o helloc.s.o
 test_helloc.o:	helloc.h

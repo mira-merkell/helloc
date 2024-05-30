@@ -32,7 +32,7 @@
  */
 void helloc_world(void);
 
-/* Test, if the number is even.
+/* Test if the number is even.
  *
  * Arguments:
  * 	a	unsigned integer to check
