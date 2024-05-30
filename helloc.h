@@ -22,8 +22,25 @@
 
 #include <stdint.h>
 
+/* Print a hello message to stdout.
+ *
+ * Arguments:
+ *	void
+ *
+ * Returns:
+ *	void
+ */
 void helloc_world(void);
 
-int helloc_iseven(uint64_t);
+/* Test, if the number is even.
+ *
+ * Arguments:
+ * 	a	unsigned integer to check
+ *
+ * Returns:
+ *	1	if a is even
+ *	0	if a is odd
+ */
+int helloc_iseven(uint64_t a);
 
 #endif /* HELLOC_H */
