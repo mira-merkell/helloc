@@ -5,7 +5,7 @@ platform.
 
 ## Dependencies
 
-* [NASM](https://nasm.un) assembler
+* [NASM](https://nasm.us) assembler
 * a C compiler (gcc by default)
 
 ## How to compile the sources
@@ -29,7 +29,7 @@ You can also run a test example:
 make test
 ```
 
-To recompile with debug symbols, use:
+To recompile with debug symbols:
 
 ```bash
 make clean
@@ -39,7 +39,7 @@ make debug
 Refer to [Makefile](./Makefile) to see available options.
 
 
-# LICENSE
+## LICENSE
 
 helloc is free software: you can redistribute it and/or modify it under the
 terms of the GNU General Public License as published by the Free Software
