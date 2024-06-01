@@ -23,8 +23,8 @@
 PROGRAM	= helloc
 VERSION = 1.0.1
 
-ASM	?= nasm
-ASMFLAGS+= -Ox -felf64 -w+all -w-reloc-rel-dword
+AS	= nasm
+ASFLAGS	+= -Ox -felf64 -w+all -w-reloc-rel-dword
 CC	?= gcc
 CFLAGS	+= -std=c11 -O2 -march=native -Wall -Wextra
 LDLIBS	+=
@@ -38,23 +38,19 @@ PROGS	= helloc
 TESTS	= test_helloc
 
 # Dependencies
-helloc:		helloc.o helloc.s.o
+helloc:		main.o helloc.o
+main.o:
 helloc.o:	helloc.h
-helloc.s.o:
 
-test_helloc:	test_helloc.o helloc.s.o
-test_helloc.o:	helloc.h
+test_helloc:	test_helloc.o helloc.o
+test_helloc.o:
 
 # Version
 VERMACROS	= -DPROGRAM=\"$(PROGRAM)\" -DVERSION=\"$(VERSION)\"
-ASMFLAGS	+= $(VERMACROS)
+ASFLAGS		+= $(VERMACROS)
 CFLAGS		+= $(VERMACROS)
 
-# Utilities
-MKDIR	= mkdir -p
-RM	= rm -fv
-
-.PHONY: all debug 		\
+.PHONY: all debug		\
 	build build-test	\
 	test clean		\
 
@@ -65,10 +61,6 @@ debug: build build-test
 debug: ASMFLAGS	+= -DDEBUG -g
 debug: CFLAGS	+= -DDEBUG -g -Og
 
-# Generate objects with NASM assembler
-%.s.o: %.s
-	$(ASM) $(ASMFLAGS) -o $@ $<
-
 # Build and run tests
 build:		$(PROGS)
 build-test:	$(TESTS)
@@ -78,7 +70,6 @@ test: build-test
 		./$$t ;			\
 	done
 
-# Tidy up
 clean:
 	$(RM) *.o *.d
 	$(RM) $(PROGS)
