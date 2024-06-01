@@ -1,4 +1,4 @@
-/* helloc.c: main driver code.
+/* example.c: An example application.
  *
  * Copyright 2024 ⧉⧉⧉
  *
@@ -17,6 +17,8 @@
  * You should have received a copy of the GNU General Public License along with
  * this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <stdio.h>
+
 #include "helloc.h"
 
 int main(int argc, char **argv)
@@ -24,6 +26,7 @@ int main(int argc, char **argv)
 	(void)argc;
 	(void)argv;
 
+	printf("%s-%s: ", PROGRAM, VERSION);
 	helloc_world();
 
 	return 0;

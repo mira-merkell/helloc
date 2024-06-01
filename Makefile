@@ -34,16 +34,14 @@ LDFLAGS	+=
 ################
 # Build system #
 ################
-PROGS	= helloc
+PROGS	= example
 TESTS	= test_helloc
 
 # Dependencies
-helloc:		main.o helloc.o
-main.o:
+example:	example.o helloc.o
 helloc.o:	helloc.h
 
 test_helloc:	test_helloc.o helloc.o
-test_helloc.o:
 
 # Version
 VERMACROS	= -DPROGRAM=\"$(PROGRAM)\" -DVERSION=\"$(VERSION)\"

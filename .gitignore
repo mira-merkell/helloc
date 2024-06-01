@@ -1,9 +1,7 @@
-helloc
+example
 test_helloc
 
 *.o
 *.d
 
 *.swp
-
-tmp/
