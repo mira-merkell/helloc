@@ -50,9 +50,6 @@ VERMACROS	= -DPROGRAM=\"$(PROGRAM)\" -DVERSION=\"$(VERSION)\"
 ASFLAGS		+= $(VERMACROS)
 CFLAGS		+= $(VERMACROS)
 
-MKDIR	= mkdir -p
-RM	= rm -fv
-
 .PHONY: all debug		\
 	build build-test	\
 	test clean		\
@@ -73,7 +70,6 @@ test: build-test
 		./$$t ;			\
 	done
 
-# Tidy up
 clean:
 	$(RM) *.o *.d
 	$(RM) $(PROGS)
