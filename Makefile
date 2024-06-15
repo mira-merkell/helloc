@@ -26,7 +26,7 @@ VERSION = 1.0.1
 AS	= nasm
 ASFLAGS	+= -Ox -felf64 -w+all -w-reloc-rel-dword
 CC	?= gcc
-CFLAGS	+= -std=c11 -O2 -march=native -Wall -Wextra
+CFLAGS	+= -std=c23 -O2 -march=native -Wall -Wextra
 LDLIBS	+=
 LDFLAGS	+=
 
