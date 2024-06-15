@@ -73,9 +73,8 @@ debug: CFLAGS	+= -DDEBUG -g -Og
 build:		$(PROGS)
 build-test:	$(TESTS)
 test: build-test
-	@for t in $(TESTS); do		\
-		echo \--- $$t ;		\
-		./$$t ;			\
+	@for t in $(TESTS); do							\
+		./$$t && echo "$$t: OK" || ( echo "$$t: FAIL" ; exit 1 ) ;	\
 	done
 
 # Tidy up
