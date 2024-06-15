@@ -44,8 +44,5 @@ int main(int argc, char **argv)
 
 	test_iseven();
 
-	if (test_rt == 0)
-		fprintf(stderr, "OK\n");
-
 	return test_rt;
 }
